@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>ROBLOX CLUB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="ambient a1"></div><div class="ambient a2"></div>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="ROBLOX CLUB 홈"><span class="brand-mark">R</span><span>ROBLOX CLUB<small>PLAY · CREATE · SHARE</small></span></a>
+  <div class="top-actions"><span id="connection" class="connection">연결 설정 필요</span><button id="authBtn" class="btn btn-ghost">로그인</button></div>
+</header>
+<main class="shell">
+  <section class="hero">
+    <div class="eyebrow"><span class="pulse"></span> COMMUNITY HUB</div>
+    <h1>게임을 즐기고,<br><span>함께 성장해.</span></h1>
+    <p>공략·리뷰·창작 미션에 참여하고 커뮤니티 포인트를 모아봐.</p>
+    <div class="hero-actions"><button id="heroStart" class="btn btn-primary">아이디로 시작하기 <b>→</b></button><span class="hero-note">안전한 커뮤니티 활동 플랫폼</span></div>
+    <div class="stats">
+      <div class="stat"><span>참여 미션</span><strong id="statMissions">0</strong></div>
+      <div class="stat"><span>커뮤니티 포인트</span><strong><i id="statPoints">0</i> P</strong></div>
+      <div class="stat"><span>내 랭킹</span><strong id="statRank">-</strong></div>
+    </div>
+  </section>
+  <nav class="tabs">
+    <button class="tab active" data-tab="missions">✦ 미션</button>
+    <button class="tab" data-tab="community">▤ 커뮤니티</button>
+    <button class="tab" data-tab="ranking">★ 랭킹</button>
+    <button class="tab" data-tab="rewards">◈ 보상 교환</button>
+    <button class="tab" data-tab="guide">ⓘ 안내</button>
+    <button class="tab admin-tab hidden" data-tab="admin">⚙ 관리자</button>
+  </nav>
+  <section id="view-missions" class="view">
+    <div class="section-head"><div><div class="eyebrow">DAILY QUEST</div><h2>오늘의 미션</h2></div><span class="pill">포인트는 활동 점수</span></div>
+    <div id="missionGrid" class="mission-grid"><div class="empty">미션을 불러오는 중...</div></div>
+  </section>
+  <section id="view-community" class="view hidden">
+    <div class="section-head"><div><div class="eyebrow">COMMUNITY</div><h2>커뮤니티</h2></div></div>
+    <div class="panel"><h3>커뮤니티 게시판</h3><p class="muted">게임 공략, 리뷰, 창작 아이디어를 공유해 봐.</p>
+      <div class="post-form"><input id="postTitle" maxlength="80" placeholder="게시글 제목"><textarea id="postBody" maxlength="1500" placeholder="내용을 입력해줘. 개인정보는 올리지 마."></textarea><button id="postBtn" class="btn btn-primary">게시글 등록</button></div>
+      <div id="postList" class="post-list"></div>
+    </div>
+  </section>
+  <section id="view-ranking" class="view hidden">
+    <div class="section-head"><div><div class="eyebrow">CLUB RANKING</div><h2>커뮤니티 랭킹</h2></div></div>
+    <div class="panel"><div id="rankingList" class="post-list"><div class="empty">랭킹을 불러오는 중...</div></div></div>
+  </section>
+  <section id="view-rewards" class="view hidden">
+    <div class="section-head"><div><div class="eyebrow">REWARD STORE</div><h2>보상 교환</h2></div><span class="pill">관리자 승인 후 처리</span></div>
+    <div id="rewardGrid" class="mission-grid"></div>
+    <div class="panel"><h3>내 교환 신청</h3><div id="myRedemptions" class="post-list"><div class="empty">로그인하면 신청 내역을 볼 수 있어.</div></div></div>
+  </section>
+  <section id="view-guide" class="view hidden">
+    <div class="section-head"><div><div class="eyebrow">IMPORTANT</div><h2>운영 안내</h2></div></div>
+    <div class="guide-grid">
+      <article class="guide-card"><span class="guide-icon">✦</span><h3>포인트 안내</h3><p>포인트는 사이트 내 활동 점수야. 보상은 운영자가 공급 및 이용 조건을 확인한 항목만 등록하고 승인해.</p></article>
+      <article class="guide-card"><span class="guide-icon">⌂</span><h3>안전한 이용</h3><p>비밀번호, 전화번호, 학교, 주소 등 개인정보를 게시하지 마. 타인의 계정이나 결제정보를 요구하는 미션은 등록하지 않아.</p></article>
+      <article class="guide-card"><span class="guide-icon">◎</span><h3>운영 원칙</h3><p>미션은 증빙 확인 후 승인돼. 허위 인증, 중복 참여, 부정한 포인트 획득은 제한될 수 있어.</p></article>
+    </div>
+  </section>
+  <section id="view-admin" class="view hidden">
+    <div class="section-head"><div><div class="eyebrow">CONTROL ROOM</div><h2>관리자</h2></div><span class="pill">관리자 전용</span></div>
+    <div class="admin-grid">
+      <div class="panel"><h3>미션 추가</h3><input id="newMissionTitle" placeholder="미션 제목"><textarea id="newMissionDesc" placeholder="미션 설명"></textarea><div class="form-row"><input id="newMissionPoints" type="number" min="1" max="100000" placeholder="포인트"><input id="newMissionCategory" placeholder="분류" value="커뮤니티"></div><button id="addMissionBtn" class="btn btn-primary">미션 등록</button></div>
+      <div class="panel"><h3>보상 추가</h3><input id="newRewardTitle" placeholder="보상 이름"><textarea id="newRewardDesc" placeholder="보상 설명 및 지급 조건"></textarea><div class="form-row"><input id="newRewardCost" type="number" min="1" placeholder="필요 포인트"><select id="newRewardActive"><option value="false">비공개(준비 중)</option><option value="true">판매/교환 가능</option></select></div><button id="addRewardBtn" class="btn btn-primary">보상 등록</button><p class="tiny">실제 상품은 공급 권한과 약관을 확인한 뒤 활성화해.</p></div>
+    </div>
+    <div class="panel"><h3>미션 인증 심사</h3><div id="adminSubmissions" class="post-list"></div></div>
+    <div class="panel"><h3>보상 교환 심사</h3><div id="adminRedemptions" class="post-list"></div></div>
+  </section>
+  <footer>ROBLOX CLUB · COMMUNITY HUB <span>비공식 팬 커뮤니티이며 Roblox와 제휴·후원 관계가 아닙니다.</span></footer>
+</main>
+<div id="modal" class="modal hidden"><div class="modal-card"><button id="closeModal" class="close">×</button><div id="modalContent"></div></div></div>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body></html>
